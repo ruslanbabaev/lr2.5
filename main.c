@@ -1,16 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int change_num(int *mas, *mas_min, *mas_max) {
+int change_num(int *mas, int *mas_min, int *mas_max) {
     int l_max = 0, l_min = 0;
+
     for (int i = 0; i < 10; i++) {
-        if ((mas[i] == *mas_min) && (l_min == 0)) {
+        if ((mas[i] == *mas_min) && (l_max == 0)) {
             mas[i] = *mas_max;
-            l_min = 1;
-        }
-        if ((mas[i] == *mas_max) && (l_max == 0)) {
             l_max = 1;
+        }
+        else if ((mas[i] == *mas_max) && (l_min == 0)) {
             mas[i] = *mas_min;
+            l_min= 1;
         }
     }
     return *mas;
@@ -98,7 +99,6 @@ int main() {
             if (mas[i] > mas_max)
                 mas_max = mas[i];
         }
-        
         change_num(mas, &mas_min, &mas_max);
         for (int i=0; i<10; i++) {
             printf("%d ", mas[i]);
