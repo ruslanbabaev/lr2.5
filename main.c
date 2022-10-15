@@ -1,21 +1,88 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int change_num(int *mas, int *mas_min, int *mas_max) {
-    int l_max = 0, l_min = 0;
+void change_num(void);
 
-    for (int i = 0; i < 10; i++) {
-        if ((mas[i] == *mas_min) && (l_max == 0)) {
-            mas[i] = *mas_max;
-            l_max = 1;
+int *new_mas(int*);
+
+int main(int) {
+    
+    int a, b;
+    
+    printf("Введите нижнюю границу диапазона: ");
+    if ((scanf("%d",&a) ) != 1 ) {
+            printf("Неверное введенное значение\n");
+            return 1;
         }
-        else if ((mas[i] == *mas_max) && (l_min == 0)) {
-            mas[i] = *mas_min;
-            l_min= 1;
+
+    printf("Введите верхнюю границу диапазона: ");
+    if ((scanf("%d",&b) ) != 1 ){
+            printf("Неверное введенное значение\n");
+            return 1;
+        }
+    
+    if (a>b) {
+        int a_new = a;
+        a = b;
+        b = a_new;
+    }
+    
+    while(getchar() != '\n');
+    char flag;
+    printf("Введите флаг. '-a' - поменять местами макс и мин э-т массива. '-b' - создать новый массив, который содержит уникальные элементы исходного:\n");
+    scanf("-%c", &flag);
+    
+    //Создадим массив из псевдослучайных чисел. Пусть, размер его будет 10
+    int mas[10];
+    for (int i = 0; i < 10; i++) {
+        mas[i] = a + rand()%(b-a+1);
+        printf("%d ", mas[i]);
+    }
+    printf("\n");
+    
+    if (flag == 'a') {
+        //найдем минимальный и максимальный элемент
+        int mas_max = a, mas_min = b;
+        int adr_mas_max = 0, adr_mas_min = 0;
+        for (int i = 0; i < 10; i++) {
+            if (mas[i] < mas_min) {
+                mas_min = mas[i];
+                adr_mas_min = i;
+            }
+            if (mas[i] > mas_max) {
+                mas_max = mas[i];
+                adr_mas_max = i;
+            }
+        }
+        change_num(mas, adr_mas_min, adr_mas_max);
+        for (int i=0; i<10; i++) {
+            printf("%d ", mas[i]);
         }
     }
+    
+    if (flag == 'b') {
+        new_mas(mas);
+        for (int i = 1; i <= mas[0]; i++)
+            printf("%d ", mas[i]);
+        
+    }
+    return 0;
+}
+
+
+
+int change_num(int *mas, int adr_mas_min, int adr_mas_max) {
+        
+    int a = mas[adr_mas_min];
+    
+    mas[adr_mas_min] = mas[adr_mas_max];
+        
+    mas[adr_mas_max] = a;
+
     return *mas;
 }
+
+
 
 
 int *new_mas(int *mas) {
@@ -66,50 +133,4 @@ int *new_mas(int *mas) {
         mas[i] = result[i];
     }
     return result;
-}
-
-
-int main() {
-    
-    int a, b;
-    
-    printf("Введите нижнюю границу диапазона: ");
-    scanf("%d", &a);
-    printf("Введите верхнюю границу диапазона: ");
-    scanf("%d", &b);
-    while(getchar() != '\n');
-    char flag;
-    printf("Введите флаг. '-a' - поменять местами макс и мин э-т массива. '-b' - создать новый массив, который содержит уникальные элементы исходного:\n");
-    scanf("-%c", &flag);
-    
-    //Создадим массив из псевдослучайных чисел. Пусть, размер его будет 10
-    int mas[10];
-    for (int i = 0; i < 10; i++) {
-        mas[i] = a + rand()%(b-a+1);
-        printf("%d ", mas[i]);
-    }
-    printf("\n");
-    
-    if (flag == 'a') {
-        //найдем минимальный и максимальный элемент
-        int mas_max = a, mas_min = b;
-        for (int i = 0; i < 10; i++) {
-            if (mas[i] < mas_min)
-                mas_min = mas[i];
-            if (mas[i] > mas_max)
-                mas_max = mas[i];
-        }
-        change_num(mas, &mas_min, &mas_max);
-        for (int i=0; i<10; i++) {
-            printf("%d ", mas[i]);
-        }
-    }
-    
-    if (flag == 'b') {
-        new_mas(mas);
-        for (int i = 1; i <= mas[0]; i++)
-            printf("%d ", mas[i]);
-        
-    }
-    return 0;
 }
